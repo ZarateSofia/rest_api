@@ -8,8 +8,13 @@ var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
 var suppliersRouter = require('./routes/suppliers');
 
+const swaggerUi = require('swagger-ui-express')
+
+const swaggerFile = require('./swagger_output.json')
 
 var app = express();
+
+app.use('/documentation', swaggerUi.serve, swaggerUi.setup(swaggerFile))
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
