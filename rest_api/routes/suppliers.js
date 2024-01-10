@@ -21,38 +21,10 @@ router.get('/findById/:id', function(req, res, next) {
     .catch(error => res.status(400).send(error)) 
   });
 
-  router.post('/save', function(req, res, next) { 
-    let {SupplierName, ContactName, Address, City, PostalCode, Country, Phone} = req.body;
-          
-      Suppliers.create({
-          SupplierName: SupplierName, 
-          ContactName: ContactName, 
-          Address: Address, 
-          City: City, 
-          PostalCode: PostalCode, 
-          Country: Country, 
-          Phone: Phone
-      })
-      .then(data => {  
-        res.json(data);  
-    })  
-    .catch(error => res.status(400).send(error)) 
-  });
-
-  router.get('/findAll/json', function(req, res, next) {
-    Suppliers.findAll({  
-    })  
-    .then(data => {  
-        res.json(data);  
-    })  
-    .catch(error => res.status(400).send(error)) 
-  });
-  
-  router.put('/update', function(req, res, next) {  
-
-    let {SupplierID,SupplierName, ContactName, Address, City, PostalCode, Country, Phone} = req.body;
+router.post('/save', function(req, res, next) { 
+  let {SupplierName, ContactName, Address, City, PostalCode, Country, Phone} = req.body;
         
-    Suppliers.update({
+    Suppliers.create({
         SupplierName: SupplierName, 
         ContactName: ContactName, 
         Address: Address, 
@@ -60,32 +32,68 @@ router.get('/findById/:id', function(req, res, next) {
         PostalCode: PostalCode, 
         Country: Country, 
         Phone: Phone
-    },
-    {
-        where: {
-          SupplierID: parseInt(SupplierID)
-        }
     })
-    .then(users => {  
-      res.json(users);  
+    .then(data => {  
+      res.json(data);  
   })  
   .catch(error => res.status(400).send(error)) 
-  });
-  
-  router.delete('/delete/:id', function(req, res, next) {  
+});
 
-    let id = parseInt(req.params.id);
-        
-    Suppliers.destroy({
-      where: { 
-        SupplierID: id
-      }
-    })
-    .then(users => {  
-    res.json(users);  
+router.get('/findAll/json', function(req, res, next) {
+  /* Verificador de autorización */
+
+  const { role } = req.user;
+
+  if (role !== process.env.ADMIN) {
+      return res.sendStatus(401);
+  }
+
+  Suppliers.findAll({  
+  })  
+  .then(data => {  
+      res.json(data);  
   })  
   .catch(error => res.status(400).send(error)) 
-  });
-  
+});
+
+router.put('/update', function(req, res, next) {  
+
+  let {SupplierID,SupplierName, ContactName, Address, City, PostalCode, Country, Phone} = req.body;
+      
+  Suppliers.update({
+      SupplierName: SupplierName, 
+      ContactName: ContactName, 
+      Address: Address, 
+      City: City, 
+      PostalCode: PostalCode, 
+      Country: Country, 
+      Phone: Phone
+  },
+  {
+      where: {
+        SupplierID: parseInt(SupplierID)
+      }
+  })
+  .then(users => {  
+    res.json(users);  
+})  
+.catch(error => res.status(400).send(error)) 
+});
+
+router.delete('/delete/:id', function(req, res, next) {  
+
+  let id = parseInt(req.params.id);
+      
+  Suppliers.destroy({
+    where: { 
+      SupplierID: id
+    }
+  })
+  .then(users => {  
+  res.json(users);  
+})  
+.catch(error => res.status(400).send(error)) 
+});
+
 
 module.exports = router;
