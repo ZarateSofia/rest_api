@@ -6,7 +6,7 @@
     "description": ""
   },
   
-  "host": "restapi-production-9247.up.railway.app",
+  "host": "restapi-production-bfcd.up.railway.app",
   "basePath": "/",
   "schemes": [
     "https"
